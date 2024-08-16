@@ -19,7 +19,7 @@ class CameraApp < Sinatra::Base
         rtsp_devices = []
         output_file = Masscan::OutputFile.new(RES, format: :list)
         output_file.each { |rec| rtsp_devices << rec['ip'].to_s }
-        rtsp_devices
+        return rtsp_devices.sort!
     end
 
     get '/' do
