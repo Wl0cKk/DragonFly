@@ -25,8 +25,8 @@
             <input type="password" id="password" placeholder="Password" />
             <button id="addCameraButton">Add</button>
         </div>
-        
         <button id="streamButton" onclick="window.location.href='/stream'">Stream</button>
+        <%= erb :_camera_list, layout: false %>
     </div>
     <footer>
         <p>

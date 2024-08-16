@@ -62,20 +62,23 @@ footer img {
     flex-direction: column;
 }
 
-#scanner_btn, #add_area {
+#scanner_btn, 
+#add_area, #h_menu {
     display: flex;
     align-items: center; 
     width: 100%;
 }
 
 #scanner_btn > *:not(button),
-#add_area > *:not(button) {
+#add_area > *:not(button),
+#h_menu > *:not(button) {
     flex: 1;
     margin-right: 10px;
 }
 
 #scanner_btn button,
-#add_area button {
+#add_area button,
+#h_menu button {
     width: 65px;
     flex: 0;
 }
@@ -92,6 +95,16 @@ button, input, select {
 
 button:hover, input:hover, select:hover {
     background-color: #697180;
+}
+
+#camera_list h3 {
+    margin: 2px;
+}
+
+#h_menu {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
 }
 
 .info-text {

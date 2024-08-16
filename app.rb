@@ -35,19 +35,11 @@ class CameraApp < Sinatra::Base
         rtsp_url = params[:url]
         username = params[:username]
         password = params[:password]
-        $stream_commands << "ffmpeg -rtsp_transport tcp -i \"#{rtsp_url}\" -filter_complex \"color=black:s=640x360\" -f nut -"
-        { status: 'success' }.to_json
+        
     end
 
     get '/stream' do
-        stream :keep_alive do |out|
-            out << "run stream...\n"
-            Thread.new do
-                command = $stream_commands.join(" & ")
-                system(command)
-            end
-            out << "stop streaming...\n"
-        end
+        
     end
 end
 
