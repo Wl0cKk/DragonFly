@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DragonFly</title>
+    <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/js/main.js" defer></script>
+</head>
+<body>
+    <header>
+        <img src="/images/logo.png" alt="Logo" id="logo">
+        <pre id="logotext"> DragonFly</pre>
+    </header>
+    <div id="container">
+        <div id="scanner_btn">
+            <button id="scanButton">Scan</button>
+            <span class="info-text">to search for available rtsp device</span>
+        </div>
+        
+        <div id="rtspInputContainer">
+            <select id="cameraList">
+                <option value="">available devices:</option>
+            </select>
+            <input type="text" id="rtspUrl" placeholder="RTSP URL" />
+        </div>
+
+        <div id="add_area">
+            <input type="text" id="username" placeholder="Username" />
+            <input type="password" id="password" placeholder="Password" />
+            <button id="addCameraButton">Add</button>
+        </div>
+        <button id="streamButton" onclick="window.location.href='/stream'">Stream</button>
+        <hr id="linebreaker"><br></br>
+        <div id="cameraListContainer">
+            <%= erb :_camera_list%>
+        </div>
+    </div>
+    <footer>
+        <p>
+            <a href="https://github.com/Wl0cKk/" target="_blank">
+                <img src="/images/github-white.png" alt="GitHub">
+            </a>
+        </p>
+    </footer>
+</body>
+</html>

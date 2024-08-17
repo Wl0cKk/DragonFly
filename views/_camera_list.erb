@@ -1,0 +1,12 @@
+<% require 'json' %>
+<% base = './src/camera.json' %>
+<% File.new(base, 'w+') unless File.exist?(base) %>
+<% JSON.parse(File.read(base)).each do |ind, cam| %>
+    <h3><%= ind %></h3>
+    <div id="h_menu">
+        <input type="text" value="<%= cam['ip'] %>" disabled>
+        <button id="singleStream">Stream</button>
+        <button id="editCameraButton">Edit</button>
+        <button id="deleteCameraButton">Delete</button>
+    </div>
+<% end %>

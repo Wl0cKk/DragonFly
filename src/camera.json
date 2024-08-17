@@ -1,0 +1,26 @@
+{
+  "Camera1": {
+    "ip": "192.168.100.160",
+    "username": "admin",
+    "password": "12345678",
+    "url": ""
+  },
+  "Camera2": {
+    "ip": "192.168.100.161",
+    "username": "admin",
+    "password": "12345678",
+    "url": ""
+  },
+  "Camera3": {
+    "ip": "192.168.100.162",
+    "username": "admin",
+    "password": "12345678",
+    "url": ""
+  },
+  "Camera4": {
+    "ip": "192.168.100.163",
+    "username": "admin",
+    "password": "12345678",
+    "url": ""
+  }
+}
