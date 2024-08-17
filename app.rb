@@ -38,10 +38,10 @@ class CameraApp < Sinatra::Base
         json = JSON.parse(File.read(vault))
         new_id = json.keys.size + 1
         json["Camera#{new_id}"] = {
-            "ip"         => data['url'],
+            "ip"         => data['url'].match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/)[1],
             "username"   => data['username'],
             "password"   => data['password'],
-            "additional" => ""
+            "url"        => data['url'],
         }
         File.write(vault, JSON.pretty_generate(json))
         status 200

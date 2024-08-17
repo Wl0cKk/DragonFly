@@ -3,30 +3,42 @@ async function scanCameras() {
     const cameras: string[] = await response.json();
     const cameraList = document.getElementById('cameraList') as HTMLSelectElement;
     cameraList.innerHTML = '';
-    cameras.forEach((c: string) => {
+    cameras.forEach((ip: string) => {
         const option = document.createElement('option');
-        option.value = c;
-        option.textContent = c;
+        option.value = ip;
+        option.textContent = ip;
         cameraList.appendChild(option);
     });
+    cameraList.onchange = () => {
+        const selectedIp = cameraList.value;
+        if (selectedIp) {
+            (document.getElementById('rtspUrl') as HTMLInputElement).value = `rtsp://${selectedIp}:554/`;
+        } else {
+            (document.getElementById('rtspUrl') as HTMLInputElement).value = '';
+        }
+    };
 }
 
 async function addCamera() {
     const rtspUrlInput = document.getElementById('rtspUrl') as HTMLInputElement | null;
     const usernameInput = document.getElementById('username') as HTMLInputElement | null;
     const passwordInput = document.getElementById('password') as HTMLInputElement | null;
+
     if (!rtspUrlInput || !usernameInput || !passwordInput) {
         alert("Please fill in all fields.");
         return;
     }
+    
     const url = rtspUrlInput.value;
     const username = usernameInput.value;
     const password = passwordInput.value;
+    
     const response = await fetch('/add_camera', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url, username, password })
     });
+
     if (!response.ok) {
         const errorText = await response.text();
         alert(`ERR: ${errorText}`);
@@ -44,6 +56,7 @@ async function updateCameraList() {
     const response = await fetch('/camera_show_list');
     const cameras: { name: string; ip: string }[] = await response.json();
     const cameraContainer = document.getElementById('cameraListContainer');
+    
     if (cameraContainer) {
         cameraContainer.innerHTML = '';
         cameras.forEach((cam) => {
@@ -64,7 +77,6 @@ async function updateCameraList() {
         console.error('Camera list container not found.');
     }
 }
-
 
 (document.getElementById('scanButton') as HTMLButtonElement).onclick = scanCameras;
 (document.getElementById('addCameraButton') as HTMLButtonElement).onclick = addCamera;

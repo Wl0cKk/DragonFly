@@ -18,8 +18,14 @@
             <button id="scanButton">Scan</button>
             <span class="info-text">to search for available rtsp device</span>
         </div>
-        <select id="cameraList"><option value="">Scan to see available devices</option></select>
-        <input type="text" id="rtspUrl" placeholder="RTSP URL" />
+        
+        <div id="rtspInputContainer">
+            <select id="cameraList">
+                <option value="">available devices:</option>
+            </select>
+            <input type="text" id="rtspUrl" placeholder="RTSP URL" />
+        </div>
+
         <div id="add_area">
             <input type="text" id="username" placeholder="Username" />
             <input type="password" id="password" placeholder="Password" />

@@ -105,8 +105,19 @@ button:hover, input:hover, select:hover {
     background-color: #697180;
 }
 
-#cameraListContainer h3 {
-    margin: 2px;
+#rtspInputContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+#cameraList {
+    flex: 1;
+    margin-right: 10px;
+    min-width: 120px;
+}
+#rtspUrl {
+    flex: 3;
+    min-width: 300px;
 }
 
 #h_menu {
