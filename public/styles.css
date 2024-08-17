@@ -83,7 +83,8 @@ footer img {
 #h_menu button {
     width: 65px;
     flex: 0;
-    margin-left: 5px;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 #h_menu button:last-child,
@@ -105,20 +106,18 @@ button:hover, input:hover, select:hover {
     background-color: #697180;
 }
 
-#streamButton {
-
-}
-
 #rtspInputContainer {
     display: flex;
     align-items: center;
     width: 100%;
 }
+
 #cameraList {
     flex: 1;
     margin-right: 10px;
     min-width: 120px;
 }
+
 #rtspUrl {
     flex: 3;
     min-width: 300px;
@@ -128,6 +127,10 @@ button:hover, input:hover, select:hover {
     display: flex;
     align-items: center;
     margin-top: 2px;
+}
+
+#h_menu button {
+    margin-left: 5px;
 }
 
 #linebreaker {
@@ -146,6 +149,16 @@ header {
     width: 100px;
     height: 40px;
     margin-left: auto;
+}
+
+#h_menu {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+}
+
+#h_menu button {
+    margin-left: 5px;
 }
 
 .info-text {
