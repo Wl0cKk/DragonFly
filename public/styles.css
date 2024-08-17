@@ -118,7 +118,7 @@ button:hover, input:hover, select:hover {
 #linebreaker {
     border: none;
     height: 3px;
-    background-color: black;
+    background-color: #0e1017;
     margin: 2px 0;
     width: 100%;
 }
