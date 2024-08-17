@@ -105,6 +105,10 @@ button:hover, input:hover, select:hover {
     background-color: #697180;
 }
 
+#streamButton {
+
+}
+
 #rtspInputContainer {
     display: flex;
     align-items: center;
@@ -132,6 +136,16 @@ button:hover, input:hover, select:hover {
     background-color: #0e1017;
     margin: 2px 0;
     width: 100%;
+}
+
+header {
+    justify-content: space-between;
+}
+
+#streamButton {
+    width: 100px;
+    height: 40px;
+    margin-left: auto;
 }
 
 .info-text {
