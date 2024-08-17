@@ -12,6 +12,7 @@
     <header>
         <img src="/images/logo.png" alt="Logo" id="logo">
         <pre id="logotext"> DragonFly</pre>
+        <button id="streamButton" onclick="window.location.href='/stream'">Stream</button>
     </header>
     <div id="container">
         <div id="scanner_btn">
@@ -31,7 +32,6 @@
             <input type="password" id="password" placeholder="Password" />
             <button id="addCameraButton">Add</button>
         </div>
-        <button id="streamButton" onclick="window.location.href='/stream'">Stream</button>
         <hr id="linebreaker"><br></br>
         <div id="cameraListContainer">
             <%= erb :_camera_list%>
@@ -44,5 +44,10 @@
             </a>
         </p>
     </footer>
+    <div id="loadingModal" class="modal">
+        <div class="modal-content">
+            <div class="spinner"></div>
+        </div>
+    </div>
 </body>
 </html>
