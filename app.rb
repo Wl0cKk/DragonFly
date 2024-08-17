@@ -32,10 +32,20 @@ class CameraApp < Sinatra::Base
     end
 
     post '/add_camera' do
-        rtsp_url = params[:url]
-        username = params[:username]
-        password = params[:password]
-        
+        request.body.rewind
+        data = JSON.parse(request.body.read)
+        puts data
+        vault = './src/camera.json'
+        json = JSON.parse(File.read(vault))
+        new_id = json.keys.size + 1
+        json["Camera#{new_id}"] = {
+            "ip"         => data['url'],
+            "username"   => data['username'],
+            "password"   => data['password'],
+            "additional" => ""
+        }
+        File.write(vault, JSON.pretty_generate(json))
+        status 201
     end
 
     get '/stream' do

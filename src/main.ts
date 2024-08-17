@@ -12,7 +12,7 @@ async function scanCameras() {
 }
 
 async function addCamera() {
-	const url = (document.getElementById('rtspUrl') as HTMLInputElement).value;
+	const url      = (document.getElementById('rtspUrl')  as HTMLInputElement).value;
 	const username = (document.getElementById('username') as HTMLInputElement).value;
 	const password = (document.getElementById('password') as HTMLInputElement).value;
 	await fetch('/add_camera', {
