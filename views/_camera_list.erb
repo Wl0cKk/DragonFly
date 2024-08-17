@@ -1,12 +1,25 @@
 <% require 'json' %>
 <% base = './src/camera.json' %>
 <% File.new(base, 'w+') unless File.exist?(base) %>
-<% JSON.parse(File.read(base)).each do |ind, cam| %>
-    <h3><%= ind %></h3>
-    <div id="h_menu">
-        <input type="text" value="<%= cam['ip'] %>" disabled>
-        <button id="singleStream">Stream</button>
-        <button id="editCameraButton">Edit</button>
-        <button id="deleteCameraButton">Delete</button>
+<% cameras = JSON.parse(File.read(base)) %>
+
+<% cameras.each do |ind, cam| %>
+    <div class="camera-section">
+        <div class="camera-header" onclick="toggleDetails('<%= ind %>')">
+            <h3><%= ind %></h3>
+            <div class="toggle-arrow" id="arrow-<%= ind %>"></div>
+        </div>
+        <div class="camera-details" id="details-<%= ind %>" style="display: none;">
+		    <div id="h_menu">
+		        <input type="text" id="url-<%= ind %>" value="<%= cam['url'] %>" placeholder="RTSP URL"/>
+		        <button class="streamButton">Stream</button>
+		        <button class="deleteButton" onclick="deleteCamera('<%= ind %>')">Delete</button>
+		        <button class="applyButton" id="apply-<%= ind %>" onclick="applyChanges('<%= ind %>')">Apply</button>
+		    </div>
+		    <div id="auth_menu">
+		        <input type="text" id="username-<%= ind %>" value="<%= cam['username'] %>" placeholder="Username"/>
+		        <input type="password" id="password-<%= ind %>" value="<%= cam['password'] %>" placeholder="Password"/>
+		    </div>
+		</div>
     </div>
 <% end %>

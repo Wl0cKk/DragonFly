@@ -1,7 +1,6 @@
 async function scanCameras() {
     const loadingModal = document.getElementById('loadingModal') as HTMLDivElement;
     loadingModal.style.display = 'flex';
-
     try {
         const response = await fetch('/scan', { method: 'POST' });
         const cameras: string[] = await response.json();
@@ -55,30 +54,94 @@ async function addCamera() {
         console.log('Camera list updated.');
     }
 }
-
 async function updateCameraList() {
     const response = await fetch('/camera_show_list');
-    const cameras: { name: string; ip: string }[] = await response.json();
+    const cameras: { name: string; ip: string; username: string; password: string; url: string; }[] = await response.json();
     const cameraContainer = document.getElementById('cameraListContainer');
-    
     if (cameraContainer) {
         cameraContainer.innerHTML = '';
         cameras.forEach((cam) => {
             const cameraDiv = document.createElement('div');
-            cameraDiv.className = 'camera_list';
+            cameraDiv.className = 'camera-section';
             cameraDiv.innerHTML = `
-                <h3>${cam.name}</h3>
-                <div id="h_menu">
-                    <input type="text" value="${cam.ip}" disabled>
-                    <button class="singleStream">Stream</button>
-                    <button class="editCameraButton">Edit</button>
-                    <button class="deleteCameraButton">Delete</button>
+                <div class="camera-header" onclick="toggleDetails('${cam.name}')">
+                    <h3>${cam.name}</h3>
+                    <div class="toggle-arrow" id="arrow-${cam.name}"></div>
+                </div>
+                <div class="camera-details" id="details-${cam.name}" style="display: none;">
+                    <div id="h_menu">
+                        <input type="text" id="url-${cam.name}" value="${cam.url}" placeholder="RTSP URL"/>
+                        <button class="streamButton">Stream</button>
+                        <button class="deleteButton" onclick="deleteCamera('${cam.name}')">Delete</button>
+                    </div>
+                    <div id="auth_menu">
+                        <input type="text" id="username-${cam.name}" value="${cam.username}" placeholder="Username"/>
+                        <input type="password" id="password-${cam.name}" value="${cam.password}" placeholder="Password"/>
+                        <button class="applyButton" id="apply-${cam.name}" style="display: none;" onclick="applyChanges('${cam.name}')">Apply</button>
+                    </div>
                 </div>
             `;
             cameraContainer.appendChild(cameraDiv);
+            const urlInput = document.getElementById(`url-${cam.name}`) as HTMLInputElement;
+            const usernameInput = document.getElementById(`username-${cam.name}`) as HTMLInputElement;
+            const passwordInput = document.getElementById(`password-${cam.name}`) as HTMLInputElement;
+
+            [urlInput, usernameInput, passwordInput].forEach(input => {
+                input.addEventListener('input', function() {
+                    const applyButton = document.getElementById(`apply-${cam.name}`) as HTMLButtonElement;
+                    applyButton.style.display = "inline-block";
+                    const deleteButton = document.querySelector(`.deleteButton[onclick*="${cam.name}"]`) as HTMLButtonElement;
+                    deleteButton.style.display = "none";
+                });
+            });
         });
     } else {
         console.error('Camera list container not found.');
+    }
+}
+
+function toggleDetails(cameraId: string) {
+    const details = document.getElementById(`details-${cameraId}`) as HTMLDivElement;
+    const arrow = document.getElementById(`arrow-${cameraId}`) as HTMLDivElement;
+    if (details.style.display === "none") {
+        details.style.display = "block";
+        arrow.style.transform = "rotate(180deg)";
+    } else {
+        details.style.display = "none";
+        arrow.style.transform = "rotate(270deg)";
+    }
+}
+
+async function deleteCamera(cameraId: string) {
+    const response = await fetch(`/delete_camera/${cameraId}`, { method: 'DELETE' });
+    if (!response.ok) {
+        alert(`Failed to delete camera: ${cameraId}`);
+    } else {
+        await updateCameraList();
+        alert(`Camera ${cameraId} deleted successfully.`);
+    }
+}
+
+async function applyChanges(cameraId: string) {
+    const urlInput = document.getElementById(`url-${cameraId}`) as HTMLInputElement;
+    const usernameInput = document.getElementById(`username-${cameraId}`) as HTMLInputElement;
+    const passwordInput = document.getElementById(`password-${cameraId}`) as HTMLInputElement;
+    const data = {
+        url: urlInput.value,
+        username: usernameInput.value,
+        password: passwordInput.value
+    };
+    const response = await fetch(`/update_camera/${cameraId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        const errorText = await response.text();
+        alert(`Failed to update camera: ${errorText}`);
+    } else {
+        alert(`Updated camera ${cameraId} successfully.`);
+        await updateCameraList();
     }
 }
 
