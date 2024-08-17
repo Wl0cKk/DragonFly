@@ -64,7 +64,8 @@ footer img {
 }
 
 #scanner_btn, 
-#add_area, #h_menu {
+#add_area, 
+#h_menu {
     display: flex;
     align-items: center; 
     width: 100%;
@@ -74,7 +75,7 @@ footer img {
 #add_area > *:not(button),
 #h_menu > *:not(button) {
     flex: 1;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 #scanner_btn button,
@@ -82,6 +83,12 @@ footer img {
 #h_menu button {
     width: 65px;
     flex: 0;
+    margin-left: 5px;
+}
+
+#h_menu button:last-child,
+#add_area button:last-child {
+    margin-right: 0px;
 }
 
 button, input, select {
