@@ -26,12 +26,15 @@
             <button id="addCameraButton">Add</button>
         </div>
         <button id="streamButton" onclick="window.location.href='/stream'">Stream</button>
-        <%= erb :_camera_list, layout: false %>
+        <hr id="linebreaker">
+        <div id="cameraListContainer">
+            <%= erb :_camera_list%>
+        </div>
     </div>
     <footer>
         <p>
             <a href="https://github.com/Wl0cKk/" target="_blank">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/180px-GitHub_Invertocat_Logo.svg.png" alt="GitHub">
+                <img src="/images/github-white.png" alt="GitHub">
             </a>
         </p>
     </footer>

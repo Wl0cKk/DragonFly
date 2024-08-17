@@ -9,14 +9,14 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #0d1a26;
-    color: white;
+    background-color: #2b2a33;
+    color: #e6edf2;
 }
 
 header, footer {
     width: 100%;
     max-width: 800px;
-    background-color: #1e2c39;
+    background-color: #0e1017;
     padding: 10px;
     display: flex;
     align-items: center;
@@ -26,12 +26,12 @@ header, footer {
 footer {
     padding: 1px;
     justify-content: center;
-    color: white;
+    color: #e6edf2;
     margin-top: auto;
 }
 
 footer a {
-    color: white;
+    color: #e6edf2;
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -53,7 +53,7 @@ footer img {
 
 #container {
     text-align: left;
-    background: #132639;
+    background: #161c22;
     padding: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     width: 100%;
@@ -87,8 +87,8 @@ footer img {
 button, input, select {
     display: block;
     margin: 10px 0;
-    background-color: #1e2c39;
-    color: white;
+    background-color: #292e36;
+    color: #e6edf2;
     border: 1px solid #ffffff;
     padding: 10px;
     width: 100%;
@@ -98,7 +98,7 @@ button:hover, input:hover, select:hover {
     background-color: #697180;
 }
 
-#camera_list h3 {
+#cameraListContainer h3 {
     margin: 2px;
 }
 
@@ -106,6 +106,14 @@ button:hover, input:hover, select:hover {
     display: flex;
     align-items: center;
     margin-top: 2px;
+}
+
+#linebreaker {
+    border: none;
+    height: 3px;
+    background-color: black;
+    margin: 2px 0;
+    width: 100%;
 }
 
 .info-text {

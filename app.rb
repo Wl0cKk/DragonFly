@@ -34,7 +34,6 @@ class CameraApp < Sinatra::Base
     post '/add_camera' do
         request.body.rewind
         data = JSON.parse(request.body.read)
-        puts data
         vault = './src/camera.json'
         json = JSON.parse(File.read(vault))
         new_id = json.keys.size + 1
@@ -45,12 +44,22 @@ class CameraApp < Sinatra::Base
             "additional" => ""
         }
         File.write(vault, JSON.pretty_generate(json))
-        status 201
+        status 200
     end
 
     get '/stream' do
         
     end
+
+    get '/camera_show_list' do
+        content_type :json
+        json = JSON.parse(File.read('./src/camera.json'))
+        camera_list = json.map { |ind, cam|
+            { name: ind, ip: cam['ip'] }
+        }
+        camera_list.to_json
+    end
+
 end
 
 CameraApp.run!
