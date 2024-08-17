@@ -1,26 +1,30 @@
 async function scanCameras() {
-    const response = await fetch('/scan', { method: 'POST' });
-    const cameras: string[] = await response.json();
-    const cameraList = document.getElementById('cameraList') as HTMLSelectElement;
-    cameraList.innerHTML = '';
-    cameras.forEach((ip: string) => {
-        const option = document.createElement('option');
-        option.value = ip;
-        option.textContent = ip;
-        cameraList.appendChild(option);
-    });
-    if (cameras.length > 0) {
-        const selectedIp = cameras[0];
-        (document.getElementById('rtspUrl') as HTMLInputElement).value = `rtsp://${selectedIp}:554/`;
-    }
-    cameraList.onchange = () => {
-        const selectedIp = cameraList.value;
-        if (selectedIp) {
-            (document.getElementById('rtspUrl') as HTMLInputElement).value = `rtsp://${selectedIp}:554/`;
-        } else {
-            (document.getElementById('rtspUrl') as HTMLInputElement).value = '';
+    const loadingModal = document.getElementById('loadingModal') as HTMLDivElement;
+    loadingModal.style.display = 'flex';
+
+    try {
+        const response = await fetch('/scan', { method: 'POST' });
+        const cameras: string[] = await response.json();
+        const cameraList = document.getElementById('cameraList') as HTMLSelectElement;
+        cameraList.innerHTML = '';
+        cameras.forEach((ip: string) => {
+            const option = document.createElement('option');
+            option.value = ip;
+            option.textContent = ip;
+            cameraList.appendChild(option);
+        });
+        if (cameras.length > 0) {
+            (document.getElementById('rtspUrl') as HTMLInputElement).value = `rtsp://${cameras[0]}:554/`;
         }
-    };
+        cameraList.onchange = () => {
+            const selectedIp = cameraList.value;
+            (document.getElementById('rtspUrl') as HTMLInputElement).value = selectedIp ? `rtsp://${selectedIp}:554/` : '';
+        };
+    } catch (error) {
+        alert(`Failed to fetch cameras: ${error}`);
+    } finally {
+        loadingModal.style.display = 'none';
+    }
 }
 
 async function addCamera() {
@@ -51,7 +55,6 @@ async function addCamera() {
         console.log('Camera list updated.');
     }
 }
-
 
 async function updateCameraList() {
     const response = await fetch('/camera_show_list');

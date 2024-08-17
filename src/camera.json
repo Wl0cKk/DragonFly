@@ -28,5 +28,11 @@
     "username": "admin",
     "password": "admin",
     "url": "rtsp://192.168.100.162:554/"
+  },
+  "Camera6": {
+    "ip": "192.168.100.6",
+    "username": "admin",
+    "password": "admin",
+    "url": "rtsp://192.168.100.6:554/"
   }
 }
