@@ -9,6 +9,10 @@ async function scanCameras() {
         option.textContent = ip;
         cameraList.appendChild(option);
     });
+    if (cameras.length > 0) {
+        const selectedIp = cameras[0];
+        (document.getElementById('rtspUrl') as HTMLInputElement).value = `rtsp://${selectedIp}:554/`;
+    }
     cameraList.onchange = () => {
         const selectedIp = cameraList.value;
         if (selectedIp) {
@@ -23,22 +27,18 @@ async function addCamera() {
     const rtspUrlInput = document.getElementById('rtspUrl') as HTMLInputElement | null;
     const usernameInput = document.getElementById('username') as HTMLInputElement | null;
     const passwordInput = document.getElementById('password') as HTMLInputElement | null;
-
-    if (!rtspUrlInput || !usernameInput || !passwordInput) {
+    if (!rtspUrlInput?.value.trim() || !usernameInput?.value.trim() || !passwordInput?.value.trim()) {
         alert("Please fill in all fields.");
         return;
     }
-    
     const url = rtspUrlInput.value;
     const username = usernameInput.value;
     const password = passwordInput.value;
-    
     const response = await fetch('/add_camera', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url, username, password })
     });
-
     if (!response.ok) {
         const errorText = await response.text();
         alert(`ERR: ${errorText}`);
@@ -51,6 +51,7 @@ async function addCamera() {
         console.log('Camera list updated.');
     }
 }
+
 
 async function updateCameraList() {
     const response = await fetch('/camera_show_list');
