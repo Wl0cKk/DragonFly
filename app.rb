@@ -56,7 +56,13 @@ class CameraApp < Sinatra::Base
         content_type :json
         json = JSON.parse(File.read('./src/camera.json'))
         camera_list = json.map { |ind, cam|
-            { name: ind, ip: cam['ip'] }
+            {
+                name: ind,
+                ip: cam['ip'],
+                username: cam['username'],
+                password: cam['password'],
+                url: cam['url']
+            }
         }
         camera_list.to_json
     end

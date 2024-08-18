@@ -54,11 +54,14 @@ async function addCamera() {
         console.log('Camera list updated.');
     }
 }
+
 async function updateCameraList() {
     const response = await fetch('/camera_show_list');
     const cameras: { name: string; ip: string; username: string; password: string; url: string; }[] = await response.json();
     const cameraContainer = document.getElementById('cameraListContainer');
-    if (cameraContainer) {
+    if (!cameraContainer) {
+    	console.error('Camera list container not found.');
+    } else {
         cameraContainer.innerHTML = '';
         cameras.forEach((cam) => {
             const cameraDiv = document.createElement('div');
@@ -85,7 +88,6 @@ async function updateCameraList() {
             const urlInput = document.getElementById(`url-${cam.name}`) as HTMLInputElement;
             const usernameInput = document.getElementById(`username-${cam.name}`) as HTMLInputElement;
             const passwordInput = document.getElementById(`password-${cam.name}`) as HTMLInputElement;
-
             [urlInput, usernameInput, passwordInput].forEach(input => {
                 input.addEventListener('input', function() {
                     const applyButton = document.getElementById(`apply-${cam.name}`) as HTMLButtonElement;
@@ -95,8 +97,6 @@ async function updateCameraList() {
                 });
             });
         });
-    } else {
-        console.error('Camera list container not found.');
     }
 }
 
