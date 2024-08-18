@@ -55,6 +55,39 @@ async function addCamera() {
     }
 }
 
+async function deleteCamera(cameraId: string) {
+    const response = await fetch(`/delete_camera/${cameraId}`, { method: 'DELETE' });
+    if (!response.ok) {
+        alert(`Failed to delete camera: ${cameraId}`);
+    } else {
+        await updateCameraList();
+        alert(`Camera ${cameraId} deleted successfully.`);
+    }
+}
+
+async function applyChanges(cameraId: string) {
+    const urlInput = document.getElementById(`url-${cameraId}`) as HTMLInputElement;
+    const usernameInput = document.getElementById(`username-${cameraId}`) as HTMLInputElement;
+    const passwordInput = document.getElementById(`password-${cameraId}`) as HTMLInputElement;
+    const data = {
+        url: urlInput.value,
+        username: usernameInput.value,
+        password: passwordInput.value
+    };
+    const response = await fetch(`/update_camera/${cameraId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        const errorText = await response.text();
+        alert(`Failed to update camera: ${errorText}`);
+    } else {
+        alert(`Updated camera ${cameraId} successfully.`);
+        await updateCameraList();
+    }
+}
+
 async function updateCameraList() {
     const response = await fetch('/camera_show_list');
     const cameras: { name: string; ip: string; username: string; password: string; url: string; }[] = await response.json();
@@ -109,39 +142,6 @@ function toggleDetails(cameraId: string) {
     } else {
         details.style.display = "none";
         arrow.style.transform = "rotate(270deg)";
-    }
-}
-
-async function deleteCamera(cameraId: string) {
-    const response = await fetch(`/delete_camera/${cameraId}`, { method: 'DELETE' });
-    if (!response.ok) {
-        alert(`Failed to delete camera: ${cameraId}`);
-    } else {
-        await updateCameraList();
-        alert(`Camera ${cameraId} deleted successfully.`);
-    }
-}
-
-async function applyChanges(cameraId: string) {
-    const urlInput = document.getElementById(`url-${cameraId}`) as HTMLInputElement;
-    const usernameInput = document.getElementById(`username-${cameraId}`) as HTMLInputElement;
-    const passwordInput = document.getElementById(`password-${cameraId}`) as HTMLInputElement;
-    const data = {
-        url: urlInput.value,
-        username: usernameInput.value,
-        password: passwordInput.value
-    };
-    const response = await fetch(`/update_camera/${cameraId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    });
-    if (!response.ok) {
-        const errorText = await response.text();
-        alert(`Failed to update camera: ${errorText}`);
-    } else {
-        alert(`Updated camera ${cameraId} successfully.`);
-        await updateCameraList();
     }
 }
 

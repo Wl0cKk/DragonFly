@@ -7,8 +7,26 @@ require 'masscan/output_file'
 class CameraApp < Sinatra::Base
     $ip_cameras = []
     $stream_commands = []
+    
     RES = File.expand_path('/tmp/masscan_results.txt')
+    CAM_LIST_PATH = './src/camera.json'
+
     ip_range = -> { Socket.ip_address_list.find(&:ipv4_private?).ip_address.sub(/(\d+)$/, '0') + '/24' }
+
+    def load_cameras(); JSON.parse(File.read(CAM_LIST_PATH)) end
+    def save_cameras(cameras); File.write(CAM_LIST_PATH, JSON.pretty_generate(cameras)) end
+
+    def update_camera_data(camera_id, data)
+        json = load_cameras
+        json[camera_id] = {
+            "ip" => data['url'].match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/)[1],
+            "username" => data['username'],
+            "password" => data['password'],
+            "url" => data['url']
+        }
+        save_cameras(json)
+    end
+    
     def find_cameras(ip)
         Masscan::Command.sudo do |ms|
             ms.output_format = :list
@@ -19,9 +37,9 @@ class CameraApp < Sinatra::Base
         rtsp_devices = []
         output_file = Masscan::OutputFile.new(RES, format: :list)
         output_file.each { |rec| rtsp_devices << rec['ip'].to_s }
-        return rtsp_devices.sort!
+        rtsp_devices.sort!
     end
-
+    
     get '/' do
         erb :index
     end
@@ -34,39 +52,37 @@ class CameraApp < Sinatra::Base
     post '/add_camera' do
         request.body.rewind
         data = JSON.parse(request.body.read)
-        vault = './src/camera.json'
-        json = JSON.parse(File.read(vault))
-        new_id = json.keys.size + 1
-        device = data['url']
-        json["Camera#{new_id}"] = {
-            "ip"         => device.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/)[1],
-            "username"   => data['username'],
-            "password"   => data['password'],
-            "url"        => device,
-        }
-        File.write(vault, JSON.pretty_generate(json))
-        status 200
-    end
-
-    get '/stream' do
+        json = load_cameras
+        new_id = "Camera#{json.size + 1}"
         
+        update_camera_data(new_id, data)
+        status 200
     end
 
     get '/camera_show_list' do
         content_type :json
-        json = JSON.parse(File.read('./src/camera.json'))
-        camera_list = json.map { |ind, cam|
-            {
-                name: ind,
-                ip: cam['ip'],
-                username: cam['username'],
-                password: cam['password'],
-                url: cam['url']
-            }
-        }
-        camera_list.to_json
+        load_cameras.map { |name, cam| cam.merge({"name" => name}) }.to_json
     end
 
+    delete '/delete_camera/:cameraId' do |cam_id|
+        json = load_cameras
+        json.delete(cam_id)
+
+        updated_cameras = json.each_with_index.to_h { |(_, val), i| ["Camera#{i+1}", val] }
+        save_cameras(updated_cameras)
+        status 204
+    end
+
+    patch '/update_camera/:cameraId' do |cam_id|
+        request.body.rewind
+        data = JSON.parse(request.body.read)
+        update_camera_data(cam_id, data)
+        status 200
+    end
+    
+    get '/stream' do
+
+    end
 end
 
 CameraApp.run!
