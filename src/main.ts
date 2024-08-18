@@ -46,7 +46,8 @@ async function addCamera() {
         const errorText = await response.text();
         alert(`ERR: ${errorText}`);
     } else {
-        alert("Added successfully!");
+        const { message } = await response.json();
+        alert(message);
         rtspUrlInput.value = '';
         usernameInput.value = '';
         passwordInput.value = '';
@@ -58,10 +59,10 @@ async function addCamera() {
 async function deleteCamera(cameraId: string) {
     const response = await fetch(`/delete_camera/${cameraId}`, { method: 'DELETE' });
     if (!response.ok) {
-        alert(`Failed to delete camera: ${cameraId}`);
+        alert(`Failed to delete ${cameraId}`);
     } else {
         await updateCameraList();
-        alert(`Camera ${cameraId} deleted successfully.`);
+        alert(`${cameraId} deleted successfully.`);
     }
 }
 
@@ -83,7 +84,7 @@ async function applyChanges(cameraId: string) {
         const errorText = await response.text();
         alert(`Failed to update camera: ${errorText}`);
     } else {
-        alert(`Updated camera ${cameraId} successfully.`);
+        alert(`${cameraId} updated successfully.`);
         await updateCameraList();
     }
 }

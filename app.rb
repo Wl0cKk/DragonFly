@@ -50,14 +50,25 @@ class CameraApp < Sinatra::Base
     end
 
     post '/add_camera' do
-        request.body.rewind
-        data = JSON.parse(request.body.read)
-        json = load_cameras
-        new_id = "Camera#{json.size + 1}"
-        
-        update_camera_data(new_id, data)
-        status 200
-    end
+	    request.body.rewind
+	    data = JSON.parse(request.body.read)
+	    json = load_cameras
+	    
+	    existing_camera_id = json.find { |_, cam| cam['url'] == data['url'] }
+	    
+	    if existing_camera_id
+	        camera_id = existing_camera_id.first
+	        update_camera_data(camera_id, data)
+	        status 200
+	        return { message: "#{camera_id} updated successfully." }.to_json
+	    else
+	        new_id = "Camera#{json.size + 1}"
+	        update_camera_data(new_id, data)
+	        status 201
+	        return { message: "Added successfully!" }.to_json
+	    end
+	end
+
 
     get '/camera_show_list' do
         content_type :json
@@ -78,6 +89,7 @@ class CameraApp < Sinatra::Base
         data = JSON.parse(request.body.read)
         update_camera_data(cam_id, data)
         status 200
+        return { message: "#{cam_id} updated successfully." }.to_json
     end
     
     get '/stream' do
