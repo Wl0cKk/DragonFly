@@ -1,3 +1,11 @@
+let streaming = false;
+
+window.addEventListener('beforeunload', async (event) => {
+    if (streaming) {
+        await fetch('/stop_stream', { method: 'POST' });
+    }
+});
+
 async function scanCameras() {
     const loadingModal = document.getElementById('loadingModal') as HTMLDivElement;
     loadingModal.style.display = 'flex';
@@ -108,7 +116,6 @@ async function updateCameraList() {
                 <div class="camera-details" id="details-${cam.name}" style="display: none;">
                     <div id="h_menu">
                         <input type="text" id="url-${cam.name}" value="${cam.url}" placeholder="RTSP URL"/>
-                        <button class="streamButton">Stream</button>
                         <button class="deleteButton" onclick="deleteCamera('${cam.name}')">Delete</button>
                     </div>
                     <div id="auth_menu">
@@ -134,6 +141,15 @@ async function updateCameraList() {
     }
 }
 
+async function kill() {
+    const response = await fetch('/kill', { method: 'POST' });
+    if (response.ok) {
+        console.log("Server is shutting down...");
+    } else {
+        console.error("Failed to shutdown the server.");
+    }
+}
+
 function toggleDetails(cameraId: string) {
     const details = document.getElementById(`details-${cameraId}`) as HTMLDivElement;
     const arrow = document.getElementById(`arrow-${cameraId}`) as HTMLDivElement;
@@ -146,7 +162,28 @@ function toggleDetails(cameraId: string) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const streamButton = document.getElementById('streamButton') as HTMLButtonElement | null;
+    if (streamButton) {
+        streamButton.onclick = async () => {
+            const response = await fetch('/start_stream', { method: 'POST' });
+            if (response.ok) {
+                const intervalId = setInterval(async () => {
+                    if (await fetch('/stream', { method: 'GET' }).then(res => res.ok)) {
+                        clearInterval(intervalId);
+                        window.location.href = '/stream';
+                    }
+                }, 3000);
+            } else {
+                alert('An error occurred');
+            }
+        };
+    }
+});
+
 (document.getElementById('scanButton') as HTMLButtonElement).onclick = scanCameras;
 (document.getElementById('addCameraButton') as HTMLButtonElement).onclick = addCamera;
 
-document.addEventListener('DOMContentLoaded', updateCameraList);
+document.addEventListener('DOMContentLoaded', () => {
+    updateCameraList();
+});

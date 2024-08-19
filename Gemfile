@@ -5,4 +5,5 @@ source "https://rubygems.org"
 # gem "rails"
 gem "ruby-masscan",
 gem "webrick",
-gem "puma"
+gem "puma",
+gem "json"
