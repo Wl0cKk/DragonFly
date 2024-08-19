@@ -12,7 +12,6 @@
         <div class="camera-details" id="details-<%= ind %>" style="display: none;">
 		    <div id="h_menu">
 		        <input type="text" id="url-<%= ind %>" value="<%= cam['url'] %>" placeholder="RTSP URL"/>
-		        <button class="streamButton">Stream</button>
 		        <button class="deleteButton" onclick="deleteCamera('<%= ind %>')">Delete</button>
 		        <button class="applyButton" id="apply-<%= ind %>" onclick="applyChanges('<%= ind %>')">Apply</button>
 		    </div>
