@@ -3,11 +3,12 @@ require 'json'
 require 'socket'
 require 'masscan/command'
 require 'masscan/output_file'
-
 class CameraApp < Sinatra::Base
     $ip_cameras = []
     $stream_commands = []
     
+    set :server, 'webrick'
+
     RES = File.expand_path('/tmp/masscan_results.txt')
     CAM_LIST_PATH = './src/camera.json'
 
