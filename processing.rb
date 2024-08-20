@@ -80,5 +80,4 @@ module Processing
 		return script
 	end
 end
-puts Processing.draft
 
