@@ -5,8 +5,8 @@ ___
 ___
 
 #### (the program is still in development)
-Until I migrate the project to WebRTC from HLS this program is problematic to use even for me
-please use - `ruby app.rb`
+Until I migrate the project to WebRTC from HLS this program is problematic to use even for me.
+##### please use - `ruby app.rb`
 ___
 
 ### run in docker - 
